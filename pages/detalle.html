@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Detalle de Película</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="container py-5" id="detalle-pelicula">
+      <div class="text-center mb-4">
+        <h2 id="titulo" class="mb-3"></h2>
+
+        <!-- Alerta dinamica (JS) -->
+        <div id="alerta-estado" class="alert alert-info" role="alert">
+          ¡Disfruta del tráiler oficial y conoce más sobre esta película!
+        </div>
+
+        <!-- Trailer embebido -->
+        <div class="ratio ratio-16x9 mb-4">
+          <iframe id="trailer" src="" allowfullscreen
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture">
+          </iframe>
+        </div>
+      </div>
+
+      <!-- Tarjeta con sinopsis e imagen -->
+      <div class="card mb-4">
+        <div class="row g-0">
+          <div class="col-md-4">
+            <img
+              id="poster"
+              src=""
+              class="img-fluid rounded-start"
+              alt="Póster de la película"
+              loading="lazy"
+              onerror="this.onerror=null;this.src='../img/placeholder.jpg';"
+            />
+          </div>
+          <div class="col-md-8">
+            <div class="card-body">
+              <h5 class="card-title">Sinopsis</h5>
+              <p id="sinopsis" class="card-text"></p>
+
+              <!-- Badges de generos -->
+              <div id="generos" class="d-flex flex-wrap gap-2 mt-2"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="text-center">
+        <a href="../index.html" class="btn btn-secondary">Volver al inicio</a>
+      </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script>
+      $(function () {
+        const ESTRENO_DIAS_VIGENCIA = 7; // días con precio de estreno
+        const currency = new Intl.NumberFormat("es-EC", {
+          style: "currency",
+          currency: "USD",
+          minimumFractionDigits: 2
+        });
+
+        // Helpers de fecha (interpretar ISO)
+        function parseLocalDate(iso) {
+          return new Date(iso + "T00:00:00");
+        }
+        function diffDays(from, to) {
+          const MS = 24 * 60 * 60 * 1000;
+          const a = new Date(from.getFullYear(), from.getMonth(), from.getDate());
+          const b = new Date(to.getFullYear(), to.getMonth(), to.getDate());
+          return Math.round((b - a) / MS);
+        }
+
+        function calcularPrecioYEstado(peli) {
+          const hoy = new Date();
+          const estreno = parseLocalDate(peli.estreno);
+          const dias = diffDays(estreno, hoy);
+
+          const precioEstreno = Number(peli?.precios?.estreno ?? NaN);
+          const precioNormal  = Number(peli?.precios?.normal  ?? NaN);
+          const fmt = n => Number.isFinite(n) ? currency.format(n) : "—";
+
+          if (dias < 0) {
+            return {
+              clase: "alert-warning",
+              titulo: "Próximamente",
+              detalle: `Estrena el ${estreno.toLocaleDateString("es-EC")}`,
+              precioActual: fmt(precioEstreno)
+            };
+          } else if (dias < ESTRENO_DIAS_VIGENCIA) {
+            return {
+              clase: "alert-danger",
+              titulo: "Estreno",
+              detalle: `Día ${dias + 1} de ${ESTRENO_DIAS_VIGENCIA}`,
+              precioActual: fmt(precioEstreno)
+            };
+          } else {
+            return {
+              clase: "alert-success",
+              titulo: "En cartelera",
+              detalle: `Desde ${estreno.toLocaleDateString("es-EC")}`,
+              precioActual: fmt(precioNormal)
+            };
+          }
+        }
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const id = urlParams.get("id");
+
+        $.ajax({
+          url: "../data/peliculas.json",
+          method: "GET",
+          dataType: "json",
+          success: function (peliculas) {
+            const peli = Array.isArray(peliculas) ? peliculas.find((p) => String(p.id) === String(id)) : null;
+
+            if (peli) {
+              // Titulo
+              $("#titulo").text(peli.titulo);
+
+              // Poster
+              $("#poster").attr("src", "../img/" + peli.imagen)
+                          .attr("alt", "Póster de " + peli.titulo);
+
+              // Sinopsis
+              $("#sinopsis").text(peli.sinopsis);
+
+              // Trailer
+              $("#trailer").attr("src", peli.trailer)
+                           .attr("title", "Tráiler de " + peli.titulo);
+
+              // Géneros (array --> badges)
+              const generos = Array.isArray(peli.generos) ? peli.generos : (peli.generos ? [peli.generos] : []);
+              const badges = generos.map(g =>
+                `<span class="badge bg-secondary">${g}</span>`
+              ).join("");
+              $("#generos").html(badges);
+
+              // Alert dinamica: estado y precio actual
+              const estado = calcularPrecioYEstado(peli);
+              $("#alerta-estado")
+                .removeClass("alert-info alert-warning alert-danger alert-success")
+                .addClass(estado.clase)
+                .html(`
+                  <div><strong>${estado.titulo}</strong> • Precio actual: <strong>${estado.precioActual}</strong></div>
+                  <div class="small text-body-secondary">${estado.detalle}</div>
+                `);
+
+            } else {
+              mostrarError();
+            }
+          },
+          error: function () {
+            mostrarError();
+          },
+        });
+
+        function mostrarError() {
+          $("#detalle-pelicula").html(`
+            <div class="alert alert-danger text-center" role="alert">
+              No se pudo cargar la información de la película.
+            </div>
+            <div class="text-center">
+              <a href="../index.html" class="btn btn-secondary mt-3">Volver al inicio</a>
+            </div>
+          `);
+        }
+      });
+    </script>
+  </body>
+</html>
+
+

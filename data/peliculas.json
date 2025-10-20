@@ -1,0 +1,82 @@
+[
+  {
+    "id": 1,
+    "titulo": "Dune",
+    "imagen": "dune.jpg",
+    "generos": ["Aventura", "Ciencia Ficcion"],
+    "sinopsis": "Un joven emprende una misión para salvar su mundo.",
+    "trailer": "https://www.youtube.com/embed/mSY_NbSmaUI",
+    "estreno": "2025-10-15",
+    "precios": {"estreno": 8.5, "normal": 6.0}
+  },
+  {
+    "id": 2,
+    "titulo": "50 primeras citas",
+    "imagen": "50-primeras-citas.jpg",
+    "generos": ["Comedia", "Romance"],
+    "sinopsis": "Henry se enamora de Lucy, una mujer con pérdida de memoria a corto plazo.",
+    "trailer": "https://www.youtube.com/embed/17KJk3ErIx0",
+    "estreno": "2024-05-20",
+    "precios": {"estreno": 7.0, "normal": 5.0}
+  },
+  {
+    "id": 3,
+    "titulo": "Batman Caballero de la Noche",
+    "imagen": "batman-caballero-de-la-noche.webp",
+    "generos": ["Acción", "Crimen"],
+    "sinopsis": "La película comienza con el violento robo de uno de los bancos de la mafia por una banda de payasos.",
+    "trailer": "https://www.youtube.com/embed/dzQtWkpc2-c",
+    "estreno": "2008-07-18",
+    "precios": {"estreno": 7.5, "normal": 5.5}
+  },
+  {
+    "id": 4,
+    "titulo": "Interestelar",
+    "imagen": "Interstellar.jpg",
+    "generos": ["Ciencia Ficcion", "Acción"],
+    "sinopsis": "Un grupo de científicos y exploradores, encabezados por Cooper, se embarcan en un viaje espacial para encontrar un lugar con las condiciones necesarias para reemplazar a la Tierra y comenzar una nueva vida allí. La Tierra está llegando a su fin y este grupo necesita encontrar un planeta más allá de nuestra galaxia que garantice el futuro de la raza humana.",
+    "trailer": "https://www.youtube.com/embed/LYS2O1nl9iM?si=hAw1_4qIONYXxc5m",
+    "estreno": "2013-08-15",
+    "precios": {"estreno": 8.5, "normal": 6.5}
+  },
+  {
+    "id": 5,
+    "titulo": "1917",
+    "imagen": "1917.jpeg",
+    "generos": ["Belico", "Accion"],
+    "sinopsis": "Durante la Primera Guerra Mundial, dos jóvenes soldados británicos reciben una orden, aparentemente, imposible de ejecutar: en una carrera contra el reloj, deben infiltrarse en territorio enemigo para entregar un mensaje que podría salvar a miles de compañeros.",
+    "trailer": "https://www.youtube.com/embed/YrbdN5zaouU?si=gEGMXcL9HNNWftCE",
+    "estreno": "2019-12-25",
+    "precios": {"estreno": 7.5, "normal": 6}
+  },
+  {
+    "id": 6,
+    "titulo": "Oppenheimer",
+    "imagen": "Oppenheimer.jpg",
+    "generos": ["Suspenso", "Belico"],
+    "sinopsis": "Durante la Segunda Guerra Mundial, el teniente general Leslie Groves designa al físico J. Robert Oppenheimer para un grupo de trabajo que está desarrollando el Proyecto Manhattan, cuyo objetivo consiste en fabricar la primera bomba atómica.",
+    "trailer": "https://www.youtube.com/embed/gMPEbJQun68?si=-1jxAm2CQosdhSPF",
+    "estreno": "2025-10-25",
+    "precios": {"estreno": 6.5, "normal": 5.0}
+  },
+  {
+    "id": 7,
+    "titulo": "Garra de hierro",
+    "imagen": "garra-de-hierro.jpg",
+    "generos": ["Deportes", "Drama"],
+    "sinopsis": "Basada en la increíble historia de los hermanos Von Erich, que se convirtieron en mitos de la lucha libre a principios de la década de los 80. Bajo la sombra de su dominante padre y entrenador, Kevin, Kerry, David y Mike alcanzarán la gloria y serán golpeados por la tragedia, pero su vínculo fraternal estará siempre por encima de todo.",
+    "trailer": "https://www.youtube.com/embed/8KVsaoveTbw?si=1DzyrEbQlsA6A2Ka",
+    "estreno": "2025-11-12",
+    "precios": {"estreno": 7.0, "normal": 5.0}
+  },
+  {
+    "id": 8,
+    "titulo": "Superman",
+    "imagen": "superman-dc-studios.jpeg",
+    "generos": ["Accion", "Ciencia Ficcion"],
+    "sinopsis": "El multimillonario tecnológico Lex Luthor aprovecha la oportunidad para quitarse de en medio definitivamente al Hombre de Acero. ¿Podrán la reportera Lois Lane y el compañero de cuatro patas de Superman, Krypto, ayudarle antes de que sea tarde?",
+    "trailer": "https://www.youtube.com/embed/0X_kBulSMjQ?si=ktB28fhJs_2nlH58",
+    "estreno": "2025-10-19",
+    "precios": {"estreno": 6.5, "normal": 5.0}
+  }
+]
