@@ -50,22 +50,30 @@ $(document).ready(function () {
           <div class="alert alert-info text-center">No hay peliculas que mostrar.</div>
         </div>
         `);
-        return;
+      return;
     }
 
     let html = "";
-    peliculas.forEach(function(peli){
+    peliculas.forEach(function (peli) {
       const imgSrc = `img/${peli.imagen}`;
-      const generosTxt = Array.isArray(peli.generos) ? peli.generos.join(", ") : (peli.generos || "");
-      const {precioMostrar, badge} = calcularPrecioYBadge(peli);
+      const generosTxt = Array.isArray(peli.generos)
+        ? peli.generos.join(", ")
+        : peli.generos || "";
+      const { precioMostrar, badge } = calcularPrecioYBadge(peli);
 
       html += `
         <div class="col-12 col-sm-6 col-lg-4 mb-4">
           <div class="card h-100 shadow-sm">
             <div class="position-relative">
               <img src="${imgSrc}" class="card-img-top" alt="${peli.titulo}">
-              <span class="badge ${badge.clase} position-absolute top-0 start-0 m-2 px-2 py-1">${badge.texto}</span>
-              <span class="badge bg-secondary position-absolute top-0 end-0 m-2 px-2 py-1">${new Date(peli.estreno).toLocaleDateString("es-EC")}</span>
+              <span class="badge ${
+                badge.clase
+              } position-absolute top-0 start-0 m-2 px-2 py-1">${
+        badge.texto
+      }</span>
+              <span class="badge bg-secondary position-absolute top-0 end-0 m-2 px-2 py-1">${new Date(
+                peli.estreno
+              ).toLocaleDateString("es-EC")}</span>
             </div>
             <div class="card-body d-flex flex-column">
               <h5 class="card-title mb-1">${peli.titulo}</h5>
@@ -73,37 +81,43 @@ $(document).ready(function () {
               <p class="card-text small flex-grow-1">${peli.sinopsis}</p>
               <div class="d-flex align-items-center justify-content-between mt-2">
                 <span class="fw-bold">Precio: ${precioMostrar}</span>
-                <a href="pages/detalle.html?id=${encodeURIComponent(peli.id)}" class="btn btn-primary btn-sm">Ver más</a>
+                <a href="pages/detalle.html?id=${encodeURIComponent(
+                  peli.id
+                )}" class="btn btn-primary btn-sm">Ver más</a>
               </div>
             </div>
           </div>
         </div>`;
     });
 
-    $("#lista-peliculas").html(html);    
+    $("#lista-peliculas").html(html);
   }
 
   // Estado cargando
   $("#lista-peliculas").html(`
-    <div class="col-12 text-center my-4">
-      <div class="spinner-border" role="status" aria-hidden="true"></div>
-      <p class="mt-2 mb-0">Cargando películas…</p>
+    <div class="col-12 text-center my-5">
+      <div class="spinner-border text-primary" role="status" style="width: 4rem ; height: 4rem";>
+        <span class="visually-hidden">Cargando...</span>
+      </div>
+      <p class="mt-3 mb-0 fw-semibold text-secondary">Cargando películas…, por favor espere</p>
     </div>
   `);
 
   // Carga AJAX del nuevo JSON
-  $.getJSON(JSON_URL)
-    .done(function (peliculas) {
-      renderPeliculas(peliculas);
-    })
-    .fail(function (xhr, status, error) {
-      console.error("Error al cargar las películas:", error);
-      $("#lista-peliculas").html(`
+  setTimeout(function () {
+    $.getJSON(JSON_URL)
+      .done(function (peliculas) {
+        renderPeliculas(peliculas);
+      })
+      .fail(function (xhr, status, error) {
+        console.error("Error al cargar las películas:", error);
+        $("#lista-peliculas").html(`
         <div class="col-12">
           <div class="alert alert-danger text-center" role="alert">
             No se pudo cargar la lista de películas. Intenta nuevamente más tarde.
           </div>
         </div>
       `);
-    });
+      });
+  }, 5000); //5 segundos de retraso artificial
 });
