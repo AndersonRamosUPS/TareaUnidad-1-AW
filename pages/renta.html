@@ -1,56 +1,440 @@
 <!-- pages/renta.html -->
 <!DOCTYPE html>
 <html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <title>Renta de Películas • CinePlus</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
-</head>
-<body>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="../index.html">CinePlus</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav"
-              aria-controls="nav" aria-expanded="false" aria-label="Abrir menú">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="nav">
-        <ul class="navbar-nav ms-auto">
-          <li class="nav-item"><a class="nav-link" href="../index.html">Inicio</a></li>
-          <li class="nav-item"><a class="nav-link active" href="renta.html">Rentar</a></li>
-          <li class="nav-item"><a class="nav-link" href="pages/contacto.html">Contacto</a></li>
-        </ul>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Renta de Películas • CinePlus</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="../index.html">CinePlus</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#nav"
+          aria-controls="nav"
+          aria-expanded="false"
+          aria-label="Abrir menú"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="nav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="../index.html">Inicio</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="renta.html">Rentar</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="pages/contacto.html">Contacto</a>
+            </li>
+          </ul>
+        </div>
       </div>
-    </div>
-  </nav>
+    </nav>
 
-  <header class="bg-primary text-white text-center p-4">
-    <h1 class="h2 mb-0">Renta de Peliculas</h1>
-  </header>
+    <header class="bg-primary text-white text-center p-4">
+      <h1 class="h2 mb-0">Renta de Peliculas</h1>
+    </header>
 
-  <main class="container py-4 bg-secondary">
-    <div id="estado" class="text-center my-4">
+    <main class="container py-4">
+      <div id="estado" class="text-center my-4" style="display: none">
         <div class="spinner-border text-primary" role="status"></div>
         <p class="mt-2 mb-0">Cargando catalogo...</p>
+      </div>
+
+      <form id="form-renta" class="needs-validation" novalidate>
+        <div class="row g-3">
+          <!-- Datos del cliente -->
+          <div class="col-12 col-lg-6">
+            <div class="card h-100">
+              <div class="card-body">
+                <h5 class="card-title mb-3">Datos del cliente</h5>
+
+                <div class="mb-3">
+                  <label for="cliente" class="form-label"
+                    >Nombre y Apellido</label
+                  >
+                  <input
+                    type="text"
+                    id="cliente"
+                    name="cliente"
+                    class="form-control"
+                    required
+                    minlength="3"
+                  />
+                  <div class="invalid-feedback">
+                    Ingresa tu nombre (minimo 3 caracteres).
+                  </div>
+                </div>
+
+                <div class="mb-3">
+                  <label for="email" class="form-label"
+                    >Correo electronico</label
+                  >
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    class="form-control"
+                    required
+                    minlength="3"
+                  />
+                  <div class="invalid-feedback">Ingresa un correo válido.</div>
+                </div>
+
+                <div class="mb-3">
+                  <label for="pago" class="form-label">Forma de pago</label>
+                  <select id="pago" name="pago" class="form-select" required>
+                    <option value="" selected disabled>
+                      Selecciona una opción
+                    </option>
+                    <option value="Tarjeta">Tarjeta</option>
+                    <option value="Efectivo">Efectivo</option>
+                    <option value="Transferencia">Transferencia</option>
+                  </select>
+                  <div class="invalid-feedback">
+                    Selecciona una forma de pago.
+                  </div>
+                </div>
+
+                <div class="mb-3">
+                  <label for="dias" class="form-label">Días de renta</label>
+                  <input
+                    type="number"
+                    id="dias"
+                    name="dias"
+                    class="form-control"
+                    min="1"
+                    max="14"
+                    value="1"
+                    required
+                  />
+                  <div class="invalid-feedback">Ingresa entre 1 y 14 días.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!--Seleccion de peliculas-->
+          <div class="col-12 col-lg-6">
+            <div class="card h-100">
+              <div class="card-body">
+                <h5 class="card-title mb-3">Selecciona tus películas</h5>
+
+                <div class="mb-2 text-muted small">
+                  * Puedes elegir más de una. El precio mostrado es por día
+                  según estado (estreno / cartelera).
+                </div>
+
+                <div id="lista-peliculas" class="vstack gap-2">
+                  <!-- Opciones cargadas por JS -->
+                </div>
+
+                <div
+                  class="invalid-feedback d-block"
+                  id="error-peliculas"
+                  style="display: none"
+                >
+                  Selecciona al menos una película.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Botones -->
+          <div class="col-12">
+            <div class="d-flex justify-content-end gap-2">
+              <a href="../index.html" class="btn btn-outline-secondary"
+                >Cancelar</a
+              >
+              <button type="submit" class="btn btn-primary">
+                Confirmar renta
+              </button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </main>
+
+    <!-- Modal de confirmacion -->
+    <div class="modal fade" id="modalResumen" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Resumen de la renta</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Cerrar"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <div id="resumen-contenido">
+              <!-- se llena con JS -->
+            </div>
+          </div>
+          <div class="modal-footer">
+            <a href="../index.html" class="btn btn-success">Finalizar</a>
+            <button
+              type="button"
+              class="btn btn-outline-secondary"
+              data-bs-dismiss="modal"
+            >
+              Editar
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <form id="form-renta" class="needs-validation" novalidate>
-        <div class="row g-3">
-        <!-- Datos del cliente -->
-            <div class="col-12 col-lg-6">
-                <div class="card h-100">
-                    <div class="card-body">
-                        <h5 class="card-title mb-3">Datos del cliente</h5>
+    <footer class="bg-dark text-center text-white py-3">
+      <small>&copy; 2025 CinePlus. Todos los derechos reservados.</small>
+    </footer>
 
-                        <div class="mb-3">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      $(function () {
+        const JSON_URL = "../data/peliculas.json";
+        const ESTRENO_DIAS_VIGENCIA = 7;
+        const currency = new Intl.NumberFormat("es-EC", {
+          style: "currency",
+          currency: "USD",
+        });
 
-                        </div>
-                    </div>
-                </div>
+        // Helpers de fecha (local)
+        function parseLocalDate(iso) {
+          return new Date(iso + "T00:00:00");
+        }
+        function diffDays(from, to) {
+          const MS = 24 * 60 * 60 * 1000;
+          const a = new Date(
+            from.getFullYear(),
+            from.getMonth(),
+            from.getDate()
+          );
+          const b = new Date(to.getFullYear(), to.getMonth(), to.getDate());
+          return Math.round((b - a) / MS);
+        }
+
+        // Precio actual por pelicula (por dia)
+        function calcularPrecioActual(peli) {
+          const hoy = new Date();
+          const estreno = parseLocalDate(peli.estreno);
+          const dias = diffDays(estreno, hoy);
+          const precioEstreno = Number(peli?.precios?.estreno ?? NaN);
+          const precioNormal = Number(peli?.precios?.normal ?? NaN);
+
+          if (dias < 0)
+            return { precio: precioEstreno, estado: "Próximamente" };
+          if (dias < ESTRENO_DIAS_VIGENCIA)
+            return { precio: precioEstreno, estado: "Estreno" };
+          return { precio: precioNormal, estado: "En cartelera" };
+        }
+
+        // Cargar catalogo
+        $("#estado").show();
+        $.getJSON(JSON_URL)
+          .done(function (peliculas) {
+            $("#estado").hide();
+
+            if (!Array.isArray(peliculas) || peliculas.length === 0) {
+              $("#lista-peliculas").html(
+                '<div class="alert alert-info">No hay películas disponibles.</div>'
+              );
+              return;
+            }
+
+            // Render de opciones (checkbox)
+            const items = peliculas
+              .map((p) => {
+                const { precio, estado } = calcularPrecioActual(p);
+                const precioTxt = Number.isFinite(precio)
+                  ? currency.format(precio)
+                  : "—";
+                const idChk = "peli-" + p.id;
+
+                return `
+              <div class="form-check border rounded p-2">
+                <input class="form-check-input peli-check" type="checkbox" value="${
+                  p.id
+                }" id="${idChk}">
+                <label class="form-check-label w-100 d-flex justify-content-between align-items-center" for="${idChk}">
+                  <span>
+                    <strong>${p.titulo}</strong>
+                    <span class="badge ${
+                      estado === "Estreno"
+                        ? "bg-danger"
+                        : estado === "En cartelera"
+                        ? "bg-success"
+                        : "bg-warning text-dark"
+                    } ms-2">${estado}</span>
+                  </span>
+                  <span class="text-muted small">Precio/día: <strong>${precioTxt}</strong></span>
+                </label>
+              </div>
+            `;
+              })
+              .join("");
+
+            $("#lista-peliculas").html(items);
+
+            // Guardar catalogo en memoria para cálculo
+            $("#form-renta").data("peliculas", peliculas);
+          })
+          .fail(function () {
+            $("#estado").hide();
+            $("#lista-peliculas").html(
+              '<div class="alert alert-danger">No se pudo cargar el catálogo.</div>'
+            );
+          });
+
+        // Validacion y check de al menos una pelicula
+        (function initValidation() {
+          const form = document.getElementById("form-renta");
+          form.addEventListener(
+            "submit",
+            function (e) {
+              const peliculas = $("#form-renta").data("peliculas") || [];
+              const seleccionadas = $(".peli-check:checked")
+                .map(function () {
+                  return this.value;
+                })
+                .get();
+
+              // Validacion nativa
+              if (!form.checkValidity()) {
+                e.preventDefault();
+                e.stopPropagation();
+              }
+
+              // Al menos una pelicula
+              if (seleccionadas.length === 0) {
+                e.preventDefault();
+                e.stopPropagation();
+                $("#error-peliculas").show();
+              } else {
+                $("#error-peliculas").hide();
+              }
+
+              form.classList.add("was-validated");
+
+              if (form.checkValidity() && seleccionadas.length > 0) {
+                e.preventDefault(); // no recargar
+                mostrarResumen(seleccionadas, peliculas);
+              }
+            },
+            false
+          );
+        })();
+
+        // Armar y mostrar modal
+        function mostrarResumen(idsSeleccionadas, peliculas) {
+          const cliente = $("#cliente").val().trim();
+          const email = $("#email").val().trim();
+          const pago = $("#pago").val();
+          const dias = parseInt($("#dias").val(), 10);
+
+          // Obtener objetos seleccionados y precio actual
+          const items = idsSeleccionadas.map((id) => {
+            const peli = peliculas.find((p) => String(p.id) === String(id));
+            const { precio, estado } = calcularPrecioActual(peli);
+            return { titulo: peli.titulo, estado, precio };
+          });
+
+          const sumaPorDia = items.reduce(
+            (acc, it) => acc + (Number.isFinite(it.precio) ? it.precio : 0),
+            0
+          );
+          const total = sumaPorDia * dias;
+
+          const currencyTxt = (n) =>
+            Number.isFinite(n) ? currency.format(n) : "—";
+
+          const listaHtml = items
+            .map(
+              (it) => `
+          <tr>
+            <td>${it.titulo}</td>
+            <td><span class="badge ${
+              it.estado === "Estreno"
+                ? "bg-danger"
+                : it.estado === "En cartelera"
+                ? "bg-success"
+                : "bg-warning text-dark"
+            }">${it.estado}</span></td>
+            <td class="text-end">${currencyTxt(it.precio)}</td>
+          </tr>
+        `
+            )
+            .join("");
+
+          const resumenHtml = `
+          <div class="mb-3">
+            <h6 class="mb-1">Cliente</h6>
+            <div>${cliente} &lt;${email}&gt;</div>
+          </div>
+
+          <div class="row g-3">
+            <div class="col-6 col-md-4">
+              <div class="small text-muted">Forma de pago</div>
+              <div class="fw-semibold">${pago}</div>
             </div>
-        </div>
-    </form>
-  </main>
-</body>
+            <div class="col-6 col-md-4">
+              <div class="small text-muted">Días de renta</div>
+              <div class="fw-semibold">${dias}</div>
+            </div>
+            <div class="col-12 col-md-4 text-md-end">
+              <div class="small text-muted">Total a pagar</div>
+              <div class="fw-bold fs-5">${currencyTxt(total)}</div>
+            </div>
+          </div>
+
+          <hr/>
+
+          <div class="table-responsive">
+            <table class="table table-sm align-middle">
+              <thead>
+                <tr>
+                  <th>Película</th>
+                  <th>Estado</th>
+                  <th class="text-end">Precio/día</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${listaHtml}
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th colspan="2" class="text-end">Subtotal por día</th>
+                  <th class="text-end">${currencyTxt(sumaPorDia)}</th>
+                </tr>
+                <tr>
+                  <th colspan="2" class="text-end">Total (${dias} día(s))</th>
+                  <th class="text-end">${currencyTxt(total)}</th>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        `;
+
+          $("#resumen-contenido").html(resumenHtml);
+          const modal = new bootstrap.Modal(
+            document.getElementById("modalResumen")
+          );
+          modal.show();
+        }
+      });
+    </script>
+  </body>
 </html>
