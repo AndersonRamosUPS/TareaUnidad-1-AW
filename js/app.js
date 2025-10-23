@@ -78,13 +78,22 @@ $(document).ready(function () {
             <div class="card-body d-flex flex-column">
               <h5 class="card-title mb-1">${peli.titulo}</h5>
               <p class="text-muted mb-2">${generosTxt}</p>
-              <p class="card-text small flex-grow-1">${peli.sinopsis}</p>
+
               <div class="d-flex align-items-center justify-content-between mt-2">
                 <span class="fw-bold">Precio: ${precioMostrar}</span>
-                <a href="pages/detalle.html?id=${encodeURIComponent(
-                  peli.id
-                )}" class="btn btn-primary btn-sm">Ver más</a>
+                <div class="d-flex gap-2">
+                  <button type="button"
+                    class="btn btn-outline-secondary btn-sm btn-trailer"
+                    data-trailer="${peli.trailer}"
+                    data-title="${peli.titulo}">
+                    Ver tráiler
+                  </button>
+                  <a href="pages/detalle.html?id=${encodeURIComponent(
+                    peli.id
+                  )}" class="btn btn-primary btn-sm">Ver más</a>
+                </div>
               </div>
+
             </div>
           </div>
         </div>`;
@@ -120,4 +129,29 @@ $(document).ready(function () {
       `);
       });
   }, 5000); //5 segundos de retraso artificial
+
+  // Abrir modal del trailer desde la card
+  $("#lista-peliculas").on("click", ".btn-trailer", function () {
+    const url = $(this).data("trailer");
+    const title = $(this).data("title");
+
+    if (!url) {
+      alert("No hay tráiler disponible para esta película.");
+      return;
+    }
+
+    // Forzar autoplay
+    const autoplayUrl = url + (url.includes("?") ? "&" : "?") + "autoplay=1";
+
+    $("#trailerTitle").text(title);
+    $("#trailerFrame").attr("src", autoplayUrl);
+
+    const modal = new bootstrap.Modal(document.getElementById("trailerModal"));
+    modal.show();
+  });
+
+  // Limpiar el iframe al cerrar para detener el video
+  $("#trailerModal").on("hidden.bs.modal", function () {
+    $("#trailerFrame").attr("src", "");
+  });
 });

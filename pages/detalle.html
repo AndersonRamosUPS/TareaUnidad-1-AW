@@ -21,8 +21,12 @@
 
         <!-- Trailer embebido -->
         <div class="ratio ratio-16x9 mb-4">
-          <iframe id="trailer" src="" allowfullscreen
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture">
+          <iframe
+            id="trailer"
+            src=""
+            allowfullscreen
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          >
           </iframe>
         </div>
       </div>
@@ -52,6 +56,17 @@
         </div>
       </div>
 
+      <!-- Seccion de Resenias -->
+      <div class="card mb-4">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <h5 class="card-title mb-0">Reseñas</h5>
+            <div id="reseñas-resumen" class="text-muted small"></div>
+          </div>
+          <ul id="reseñas-lista" class="list-group list-group-flush"></ul>
+        </div>
+      </div>
+
       <div class="text-center">
         <a href="../index.html" class="btn btn-secondary">Volver al inicio</a>
       </div>
@@ -64,7 +79,7 @@
         const currency = new Intl.NumberFormat("es-EC", {
           style: "currency",
           currency: "USD",
-          minimumFractionDigits: 2
+          minimumFractionDigits: 2,
         });
 
         // Helpers de fecha (interpretar ISO)
@@ -73,7 +88,11 @@
         }
         function diffDays(from, to) {
           const MS = 24 * 60 * 60 * 1000;
-          const a = new Date(from.getFullYear(), from.getMonth(), from.getDate());
+          const a = new Date(
+            from.getFullYear(),
+            from.getMonth(),
+            from.getDate()
+          );
           const b = new Date(to.getFullYear(), to.getMonth(), to.getDate());
           return Math.round((b - a) / MS);
         }
@@ -84,29 +103,29 @@
           const dias = diffDays(estreno, hoy);
 
           const precioEstreno = Number(peli?.precios?.estreno ?? NaN);
-          const precioNormal  = Number(peli?.precios?.normal  ?? NaN);
-          const fmt = n => Number.isFinite(n) ? currency.format(n) : "—";
+          const precioNormal = Number(peli?.precios?.normal ?? NaN);
+          const fmt = (n) => (Number.isFinite(n) ? currency.format(n) : "—");
 
           if (dias < 0) {
             return {
               clase: "alert-warning",
               titulo: "Próximamente",
               detalle: `Estrena el ${estreno.toLocaleDateString("es-EC")}`,
-              precioActual: fmt(precioEstreno)
+              precioActual: fmt(precioEstreno),
             };
           } else if (dias < ESTRENO_DIAS_VIGENCIA) {
             return {
               clase: "alert-danger",
               titulo: "Estreno",
               detalle: `Día ${dias + 1} de ${ESTRENO_DIAS_VIGENCIA}`,
-              precioActual: fmt(precioEstreno)
+              precioActual: fmt(precioEstreno),
             };
           } else {
             return {
               clase: "alert-success",
               titulo: "En cartelera",
               detalle: `Desde ${estreno.toLocaleDateString("es-EC")}`,
-              precioActual: fmt(precioNormal)
+              precioActual: fmt(precioNormal),
             };
           }
         }
@@ -119,40 +138,50 @@
           method: "GET",
           dataType: "json",
           success: function (peliculas) {
-            const peli = Array.isArray(peliculas) ? peliculas.find((p) => String(p.id) === String(id)) : null;
+            const peli = Array.isArray(peliculas)
+              ? peliculas.find((p) => String(p.id) === String(id))
+              : null;
 
             if (peli) {
               // Titulo
               $("#titulo").text(peli.titulo);
 
               // Poster
-              $("#poster").attr("src", "../img/" + peli.imagen)
-                          .attr("alt", "Póster de " + peli.titulo);
+              $("#poster")
+                .attr("src", "../img/" + peli.imagen)
+                .attr("alt", "Póster de " + peli.titulo);
 
               // Sinopsis
               $("#sinopsis").text(peli.sinopsis);
 
               // Trailer
-              $("#trailer").attr("src", peli.trailer)
-                           .attr("title", "Tráiler de " + peli.titulo);
+              $("#trailer")
+                .attr("src", peli.trailer)
+                .attr("title", "Tráiler de " + peli.titulo);
 
               // Géneros (array --> badges)
-              const generos = Array.isArray(peli.generos) ? peli.generos : (peli.generos ? [peli.generos] : []);
-              const badges = generos.map(g =>
-                `<span class="badge bg-secondary">${g}</span>`
-              ).join("");
+              const generos = Array.isArray(peli.generos)
+                ? peli.generos
+                : peli.generos
+                ? [peli.generos]
+                : [];
+              const badges = generos
+                .map((g) => `<span class="badge bg-secondary">${g}</span>`)
+                .join("");
               $("#generos").html(badges);
 
               // Alert dinamica: estado y precio actual
               const estado = calcularPrecioYEstado(peli);
               $("#alerta-estado")
-                .removeClass("alert-info alert-warning alert-danger alert-success")
-                .addClass(estado.clase)
-                .html(`
+                .removeClass(
+                  "alert-info alert-warning alert-danger alert-success"
+                )
+                .addClass(estado.clase).html(`
                   <div><strong>${estado.titulo}</strong> • Precio actual: <strong>${estado.precioActual}</strong></div>
                   <div class="small text-body-secondary">${estado.detalle}</div>
                 `);
 
+                cargarResenas(peli.id); //llamos para cargar las resenias
             } else {
               mostrarError();
             }
@@ -173,8 +202,77 @@
           `);
         }
       });
+
+      // --- Funciones para las resenias ---
+      function renderStars(n) {
+        const val = Math.max(0, Math.min(5, Math.round(Number(n) || 0)));
+        const llenas = "★".repeat(val);
+        const vacias = "☆".repeat(5 - val);
+        return `<span class="text-warning" aria-label="${val} de 5">${llenas}</span><span class="text-muted">${vacias}</span>`;
+      }
+
+      function cargarResenas(peliculaId) {
+        const url = "../data/resenas.json";
+        $("#reseñas-lista").html(`
+    <li class="list-group-item text-center">
+      <div class="spinner-border spinner-border-sm" role="status"></div>
+      <span class="ms-2">Cargando reseñas…</span>
+    </li>
+  `);
+
+        $.getJSON(url)
+          .done(function (data) {
+            const reseñas = (Array.isArray(data) ? data : []).filter(
+              (r) => String(r.peliculaId) === String(peliculaId)
+            );
+            if (reseñas.length === 0) {
+              $("#reseñas-lista").html(
+                `<li class="list-group-item text-center text-muted">Aún no hay reseñas.</li>`
+              );
+              $("#reseñas-resumen").text("");
+              return;
+            }
+
+            const promedio =
+              reseñas.reduce(
+                (acc, r) => acc + (Number(r.calificacion) || 0),
+                0
+              ) / reseñas.length;
+            const promedioTxt = promedio.toFixed(1);
+
+            $("#reseñas-resumen").html(`
+        <span class="me-2">${renderStars(promedio)}</span>
+        <span>${promedioTxt}/5 · ${reseñas.length} reseña(s)</span>
+      `);
+
+            const items = reseñas
+              .map(
+                (r) => `
+        <li class="list-group-item">
+          <div class="d-flex justify-content-between align-items-start">
+            <div>
+              <div class="fw-semibold">${r.usuario}</div>
+              <div class="small text-muted">${new Date(
+                r.fecha + "T00:00:00"
+              ).toLocaleDateString("es-EC")}</div>
+            </div>
+            <div>${renderStars(r.calificacion)}</div>
+          </div>
+          <p class="mb-0 mt-2">${r.comentario}</p>
+        </li>
+      `
+              )
+              .join("");
+
+            $("#reseñas-lista").html(items);
+          })
+          .fail(function () {
+            $("#reseñas-lista").html(
+              `<li class="list-group-item text-center text-danger">No se pudieron cargar las reseñas.</li>`
+            );
+            $("#reseñas-resumen").text("");
+          });
+      }
     </script>
   </body>
 </html>
-
-

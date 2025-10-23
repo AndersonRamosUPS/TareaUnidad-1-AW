@@ -1,0 +1,33 @@
+[
+  { "peliculaId": 1, "usuario": "María P.", "comentario": "Una adaptación imponente, visualmente poderosa. La narrativa avanza con calma, pero el mundo es fascinante.", "calificacion": 5, "fecha": "2025-10-16" },
+  { "peliculaId": 1, "usuario": "Carlos R.", "comentario": "Buenas actuaciones y atmósfera envolvente. Me faltó un cierre más redondo en esta parte.", "calificacion": 4, "fecha": "2025-10-17" },
+  { "peliculaId": 1, "usuario": "Lita V.", "comentario": "Diseño de producción sobresaliente. El ritmo puede ser lento si no conoces la obra.", "calificacion": 4, "fecha": "2025-10-18" },
+
+  { "peliculaId": 2, "usuario": "Esteban Q.", "comentario": "Tierna y divertida. La premisa se sostiene gracias al carisma de los protagonistas.", "calificacion": 4, "fecha": "2024-05-22" },
+  { "peliculaId": 2, "usuario": "Karla Z.", "comentario": "Un romance encantador para ver en familia. Humor ligero y momentos memorables.", "calificacion": 5, "fecha": "2024-05-25" },
+  { "peliculaId": 2, "usuario": "Noé B.", "comentario": "Funciona bien dentro del género. Algunas escenas se sienten repetitivas.", "calificacion": 3, "fecha": "2024-05-26" },
+
+  { "peliculaId": 3, "usuario": "Andrea M.", "comentario": "Clásico moderno del cine de superhéroes. Villano inolvidable.", "calificacion": 5, "fecha": "2008-07-20" },
+  { "peliculaId": 3, "usuario": "Rafael T.", "comentario": "Oscura, intensa y muy bien dirigida. El segundo acto es brillante.", "calificacion": 5, "fecha": "2008-07-22" },
+  { "peliculaId": 3, "usuario": "Nico G.", "comentario": "Algunas subtramas se alargan, pero el conjunto es excelente.", "calificacion": 4, "fecha": "2008-07-23" },
+
+  { "peliculaId": 4, "usuario": "Lucía D.", "comentario": "Retrato complejo del científico y su época. Magnífica banda sonora.", "calificacion": 5, "fecha": "2023-07-23" },
+  { "peliculaId": 4, "usuario": "Pablo H.", "comentario": "Densa pero atrapante. Te deja pensando mucho tiempo después.", "calificacion": 4, "fecha": "2023-07-24" },
+  { "peliculaId": 4, "usuario": "Irene F.", "comentario": "Gran dirección y actuaciones. El montaje es exigente.", "calificacion": 4, "fecha": "2023-07-25" },
+
+  { "peliculaId": 5, "usuario": "Gaby C.", "comentario": "Colorida, ingeniosa y con mensaje. Sorpresivamente profunda.", "calificacion": 5, "fecha": "2023-07-22" },
+  { "peliculaId": 5, "usuario": "Mateo A.", "comentario": "Humor efectivo y ritmo ágil. Excelente diseño de producción.", "calificacion": 4, "fecha": "2023-07-23" },
+  { "peliculaId": 5, "usuario": "Sol R.", "comentario": "No todas las bromas funcionan, pero el conjunto brilla.", "calificacion": 4, "fecha": "2023-07-24" },
+
+  { "peliculaId": 6, "usuario": "Valeria S.", "comentario": "Ciencia ficción emotiva. El tiempo y la familia como ejes.", "calificacion": 5, "fecha": "2014-11-08" },
+  { "peliculaId": 6, "usuario": "Fabián U.", "comentario": "Visualmente impactante. Algunas explicaciones son densas.", "calificacion": 4, "fecha": "2014-11-09" },
+  { "peliculaId": 6, "usuario": "Dario E.", "comentario": "Final poderoso. Gran uso del sonido.", "calificacion": 5, "fecha": "2014-11-10" },
+
+  { "peliculaId": 7, "usuario": "Romi J.", "comentario": "Espectáculo visual en el agua. Mundo expansivo y emotivo.", "calificacion": 4, "fecha": "2022-12-18" },
+  { "peliculaId": 7, "usuario": "Julián N.", "comentario": "La trama es sencilla, pero la inmersión compensa.", "calificacion": 4, "fecha": "2022-12-20" },
+  { "peliculaId": 7, "usuario": "Anita W.", "comentario": "La duración es larga, aunque entretenida.", "calificacion": 3, "fecha": "2022-12-21" },
+
+  { "peliculaId": 8, "usuario": "Tomás C.", "comentario": "Aventura sólida con buenas secuencias. Universo coherente.", "calificacion": 4, "fecha": "2024-05-12" },
+  { "peliculaId": 8, "usuario": "Majo B.", "comentario": "Personajes interesantes y buen ritmo.", "calificacion": 4, "fecha": "2024-05-13" },
+  { "peliculaId": 8, "usuario": "Beto L.", "comentario": "Me hubiera gustado más riesgo, pero cumple.", "calificacion": 3, "fecha": "2024-05-14" }
+]
