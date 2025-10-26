@@ -11,7 +11,7 @@ h1, h2, h3, h4, .navbar-brand {
   font-family: "Poppins", "Inter", sans-serif;
   font-weight: 600;
   letter-spacing: 0.1px;
-  color: #1d1f27;
+  color: #0D6EFD;
 }
 
 /* Navbar */
@@ -20,6 +20,7 @@ h1, h2, h3, h4, .navbar-brand {
 }
 
 .navbar .navbar-brand {
+  
   font-size: 1.1rem;
   letter-spacing: 0.2px;
 }
