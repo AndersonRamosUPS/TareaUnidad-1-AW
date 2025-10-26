@@ -1,4 +1,22 @@
 $(document).ready(function () {
+  // --- Alerta de bienvenida persistente
+  const alertaKey = "bienvenidaMostrada";
+  if (!localStorage.getItem(alertaKey)) {
+    const mensaje = `
+    <h5 class="mb-1">🎬 ¡Bienvenido a CinePlus!</h5>
+    <p class="mb-0">Explora los estrenos más recientes y disfruta tu experiencia de cine.</p>
+  `;
+    $("#alerta-bienvenida").html(mensaje).removeClass("d-none");
+
+    // Ocultar automáticamente después de unos segundos
+    setTimeout(() => {
+      $("#alerta-bienvenida").fadeOut("slow");
+    }, 5000);
+
+    // Guardar marca para no volver a mostrar
+    localStorage.setItem(alertaKey, "true");
+  }
+
   const JSON_URL = "data/peliculas.json";
   const ESTRENO_DIAS_VIGENCIA = 7;
   const currency = new Intl.NumberFormat("es-EC", {
@@ -62,44 +80,55 @@ $(document).ready(function () {
       const { precioMostrar, badge } = calcularPrecioYBadge(peli);
 
       html += `
-        <div class="col-12 col-sm-6 col-lg-4 mb-4">
-          <div class="card h-100 shadow-sm">
-            <div class="position-relative">
-              <img src="${imgSrc}" class="card-img-top" alt="${peli.titulo}">
-              <span class="badge ${
-                badge.clase
-              } position-absolute top-0 start-0 m-2 px-2 py-1">${
-        badge.texto
-      }</span>
-              <span class="badge bg-secondary position-absolute top-0 end-0 m-2 px-2 py-1">${new Date(
-                peli.estreno
-              ).toLocaleDateString("es-EC")}</span>
-            </div>
-            <div class="card-body d-flex flex-column">
-              <h5 class="card-title mb-1">${peli.titulo}</h5>
-              <p class="text-muted mb-2">${generosTxt}</p>
+  <div class="col-12 col-sm-6 col-lg-4 mb-4 pelicula-item" style="display:none;">
+    <div class="card h-100 shadow-sm">
+      <div class="position-relative">
+        <img loading="lazy" src="${imgSrc}" class="card-img-top" alt="${
+        peli.titulo
+      }"
+             onerror="this.onerror=null;this.src='img/placeholder.jpg';">
+        <span class="badge ${
+          badge.clase
+        } position-absolute top-0 start-0 m-2 px-2 py-1">${badge.texto}</span>
+        <span class="badge bg-secondary position-absolute top-0 end-0 m-2 px-2 py-1">
+          ${new Date(peli.estreno).toLocaleDateString("es-EC")}
+        </span>
+      </div>
 
-              <div class="d-flex align-items-center justify-content-between mt-2">
-                <span class="fw-bold">Precio: ${precioMostrar}</span>
-                <div class="d-flex gap-2">
-                  <button type="button"
+      <div class="card-body d-flex flex-column">
+        <h5 class="card-title mb-1">${peli.titulo}</h5>
+        <p class="text-muted mb-2">${generosTxt}</p>
+        <p class="card-text small flex-grow-1">${peli.sinopsis}</p>
+
+        <div class="d-flex align-items-center justify-content-between mt-2">
+          <span class="fw-bold">Precio: ${precioMostrar}</span>
+          <div class="d-flex gap-2">
+            <button type="button"
                     class="btn btn-outline-secondary btn-sm btn-trailer"
                     data-trailer="${peli.trailer}"
                     data-title="${peli.titulo}">
-                    Ver tráiler
-                  </button>
-                  <a href="pages/detalle.html?id=${encodeURIComponent(
-                    peli.id
-                  )}" class="btn btn-primary btn-sm">Ver más</a>
-                </div>
-              </div>
-
-            </div>
+              Ver tráiler
+            </button>
+            <a href="pages/detalle.html?id=${encodeURIComponent(peli.id)}"
+               class="btn btn-primary btn-sm">
+              Ver más
+            </a>
           </div>
-        </div>`;
+        </div>
+      </div>
+    </div>
+  </div>`;
     });
 
+    // Inyecta las peliculas (ocultas)
     $("#lista-peliculas").html(html);
+
+    // Aplica animacion secuencial
+    $(".pelicula-item").each(function (index) {
+      $(this)
+        .delay(150 * index)
+        .fadeIn(400);
+    });
   }
 
   // Estado cargando
